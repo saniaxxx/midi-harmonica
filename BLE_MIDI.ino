@@ -62,7 +62,17 @@ void setupKeyboard() {
 uint64_t readKeyboard() {
   digitalWrite(LATCH, LOW);
   digitalWrite(LATCH, HIGH);
-  uint64_t states = shiftIn(DATA, CLOCK, MSBFIRST);
+
+  byte buffer[8];
+  for ( int i = 0; i < 8; i++) {
+    buffer[i] = shiftIn(DATA, CLOCK, MSBFIRST);
+  }
+
+  uint64_t states = 0;
+  for ( int i = 7; i >= 0; i--) {
+    states <<= 8;
+    states |= (uint64_t) buffer[i];
+  }
   return states;
 }
 
@@ -102,7 +112,7 @@ void processKeyboardChanges(uint64_t keyboard) {
   }
   uint64_t changed = keyboard ^ last_keyboard;
   last_keyboard = keyboard;
-  for (int i = 0; i < 64; ++i)
+  for (int i = 0; i <= 64; ++i)
   {
     if (changed & 1) {
       handleChange(i, keyboard & 1);
@@ -113,17 +123,21 @@ void processKeyboardChanges(uint64_t keyboard) {
 }
 
 void handleChange(int key, int state) {
-  //  Serial.print("#");
-  //  Serial.print(key); // номер кнопки
-  //  Serial.print(" -> ");
-  //  Serial.println(state); // новое состояние
   uint8_t note = 0;
   uint8_t channel = 0;
   if (key < sizeof(rightKeyboard)) {
     note = rightKeyboard[key];
     channel = CHANNEL0;
+  } else if (key >= 32 && key < (32 + sizeof(bassKeyboard))) {
+    note = bassKeyboard[key - 32];
+    channel = CHANNEL1;
+  } else if (key >= 32 + sizeof(bassKeyboard)) {
+    note = accordKeyboard[key - 32 - sizeof(bassKeyboard)];
+    channel = CHANNEL2;
+  } else {
+    return;
   }
-  if (state) {
+  if (!state) {
     Serial.print("noteOn -> ");
     Serial.println(note);
     Serial.print("channel -> ");

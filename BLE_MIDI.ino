@@ -137,7 +137,7 @@ void handleChange(int key, int state) {
   } else {
     return;
   }
-  if (!state) {
+  if (state) {
     Serial.print("noteOn -> ");
     Serial.println(note);
     Serial.print("channel -> ");

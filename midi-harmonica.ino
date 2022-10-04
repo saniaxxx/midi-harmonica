@@ -25,10 +25,12 @@ bool deviceConnected = false;
 
 class MyServerCallbacks: public BLEServerCallbacks {
     void onConnect(BLEServer* pServer) {
+      //Serial.println("device connected");
       deviceConnected = true;
     };
 
     void onDisconnect(BLEServer* pServer) {
+      //Serial.println("device disconnected");
       deviceConnected = false;
     }
 };
@@ -138,24 +140,24 @@ void handleChange(int key, int state) {
     return;
   }
   if (state) {
-    Serial.print("noteOn -> ");
-    Serial.println(note);
-    Serial.print("channel -> ");
-    Serial.println(channel);
-    Serial.println("");
+//    Serial.print("noteOn -> ");
+//    Serial.println(note);
+//    Serial.print("channel -> ");
+//    Serial.println(channel);
+//    Serial.println("");
     noteOn(pCharacteristic, note, channel);
   } else {
-    Serial.print("noteOff -> ");
-    Serial.println(note);
-    Serial.print("channel -> ");
-    Serial.println(channel);
-    Serial.println("");
+//    Serial.print("noteOff -> ");
+//    Serial.println(note);
+//    Serial.print("channel -> ");
+//    Serial.println(channel);
+//    Serial.println("");
     noteOff(pCharacteristic, note, channel);
   }
 }
 
 void setup() {
-  Serial.begin(115200);
+  //Serial.begin(115200);
   setupKeyboard();
   setupBle();
 }

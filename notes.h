@@ -7,6 +7,19 @@
 // Например Db2 = Ре бемоль 2й октавы
 // Число после определения ноты - код данной ноты по стандарту MIDI
 
+#define C0  0xC
+#define Db0 0xD
+#define D0  0xE
+#define Eb0 0xF
+#define E0  0x10
+#define F0  0x11
+#define Fd0 0x12
+#define G0  0x13
+#define Ab0 0x14
+#define A0  0x15
+#define Bb0 0x16
+#define B0  0x17
+
 #define C1  0x18
 #define Db1 0x19
 #define D1  0x1A
